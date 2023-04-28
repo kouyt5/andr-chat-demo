@@ -7,8 +7,21 @@
     tools:context=".InitActivity">
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/first_launch"/>
+        android:src="@drawable/first_launch" />
+
+    <ImageView
+        android:id="@+id/init_loading"
+        android:layout_width="41dp"
+        android:layout_height="49dp"
+        android:layout_gravity="center"
+        android:src="@drawable/loading"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.907" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

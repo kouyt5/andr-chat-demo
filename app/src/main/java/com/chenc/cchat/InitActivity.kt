@@ -1,41 +1,54 @@
 package com.chenc.cchat
 
 import android.content.Intent
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.view.WindowInsets
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.Animation
+import android.view.animation.LinearInterpolator
+import android.view.animation.RotateAnimation
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.chenc.cchat.databinding.ActivityInitBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
 class InitActivity : AppCompatActivity() {
+
+    private lateinit var binding : ActivityInitBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_init)
+        binding = ActivityInitBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         hideActionBar()
-        init()
+        initUI()
+        initData()
     }
 
     private fun hideActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val controller = window.decorView.windowInsetsController
-            controller?.hide(WindowInsets.Type.statusBars())
-            controller?.hide(WindowInsets.Type.navigationBars())
-        } else {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        }
+        val controller = ViewCompat.getWindowInsetsController(binding.root)
+        controller?.hide(WindowInsetsCompat.Type.statusBars())
+        controller?.hide(WindowInsetsCompat.Type.navigationBars())
         supportActionBar?.hide()
     }
-
-    fun init() {
+    private fun initUI() {
+        val animation = RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+        animation.fillAfter = true
+        animation.duration = 2000
+        animation.repeatMode = Animation.RESTART
+        animation.repeatCount = Animation.INFINITE
+        animation.interpolator = LinearInterpolator()
+        binding.initLoading.startAnimation(animation)
+    }
+    private fun initData() {
         // TODO 初始化必要组件等
         // initNetwork...
 
         // after init
         lifecycleScope.launch {
-            delay(3000)
+            delay(5000)
             val intent = Intent(this@InitActivity, MainActivity::class.java)
             startActivity(intent)
             finish()
