@@ -30,6 +30,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -45,4 +49,5 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
+    implementation 'com.tencent:mmkv:1.2.16'
 }

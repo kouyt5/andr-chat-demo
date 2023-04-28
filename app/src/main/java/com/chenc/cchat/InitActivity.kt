@@ -31,6 +31,7 @@ class InitActivity : AppCompatActivity() {
         val controller = ViewCompat.getWindowInsetsController(binding.root)
         controller?.hide(WindowInsetsCompat.Type.statusBars())
         controller?.hide(WindowInsetsCompat.Type.navigationBars())
+        controller?.isAppearanceLightStatusBars = true
         supportActionBar?.hide()
     }
     private fun initUI() {
