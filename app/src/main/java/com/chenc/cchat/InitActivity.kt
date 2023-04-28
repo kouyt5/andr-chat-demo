@@ -2,7 +2,6 @@ package com.chenc.cchat
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
@@ -37,7 +36,7 @@ class InitActivity : AppCompatActivity() {
     private fun initUI() {
         val animation = RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
         animation.fillAfter = true
-        animation.duration = 2000
+        animation.duration = 1500
         animation.repeatMode = Animation.RESTART
         animation.repeatCount = Animation.INFINITE
         animation.interpolator = LinearInterpolator()
@@ -49,7 +48,7 @@ class InitActivity : AppCompatActivity() {
 
         // after init
         lifecycleScope.launch {
-            delay(5000)
+            delay(3000)
             val intent = Intent(this@InitActivity, MainActivity::class.java)
             startActivity(intent)
             finish()
