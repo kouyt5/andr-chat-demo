@@ -7,6 +7,7 @@ import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.chenc.cchat.databinding.ActivityInitBinding
@@ -27,10 +28,10 @@ class InitActivity : AppCompatActivity() {
     }
 
     private fun hideActionBar() {
-        val controller = ViewCompat.getWindowInsetsController(binding.root)
-        controller?.hide(WindowInsetsCompat.Type.statusBars())
-        controller?.hide(WindowInsetsCompat.Type.navigationBars())
-        controller?.isAppearanceLightStatusBars = true
+        val controller = WindowCompat.getInsetsController(window, binding.root)
+        controller.hide(WindowInsetsCompat.Type.statusBars())
+        controller.hide(WindowInsetsCompat.Type.navigationBars())
+        controller.isAppearanceLightStatusBars = true
         supportActionBar?.hide()
     }
     private fun initUI() {
@@ -48,7 +49,7 @@ class InitActivity : AppCompatActivity() {
 
         // after init
         lifecycleScope.launch {
-            delay(3000)
+            delay(6000)
             val intent = Intent(this@InitActivity, MainActivity::class.java)
             startActivity(intent)
             finish()
