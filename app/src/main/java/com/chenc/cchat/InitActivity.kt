@@ -6,7 +6,6 @@ import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -49,7 +48,7 @@ class InitActivity : AppCompatActivity() {
 
         // after init
         lifecycleScope.launch {
-            delay(6000)
+            delay(1000)
             val intent = Intent(this@InitActivity, MainActivity::class.java)
             startActivity(intent)
             finish()

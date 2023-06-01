@@ -3,7 +3,11 @@
 
     <string name="init">初始化中…</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">会话</string>
+    <string name="title_dashboard">联系人</string>
+    <string name="title_notifications">设置</string>
+    <string name="search">搜索</string>
+    <string name="conversation_default_name">名字</string>
+    <string name="conversation_default_content">对对对，你说的对，对对对，你说的对，对对对，你说的对</string>
+    <string name="head_desc">头像</string>
 </resources>

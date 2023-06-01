@@ -1,4 +1,4 @@
-package com.chenc.cchat.ui.home
+package com.chenc.cchat.ui.conversation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
