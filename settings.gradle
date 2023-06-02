@@ -10,7 +10,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://repo.eclipse.org/content/repositories/paho-releases/" }
     }
 }
+
 rootProject.name = "CChat"
 include ':app'
+include ':mqtt-service'
