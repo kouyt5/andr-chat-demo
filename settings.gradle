@@ -16,4 +16,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "CChat"
 include ':app'
-include ':mqtt-service'
