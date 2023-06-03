@@ -10,7 +10,7 @@ class ConversationListAdapter : RecyclerView.Adapter<ConversationListAdapter.Vie
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.conversation_item_left, parent, false)
+            .inflate(R.layout.conversation_item_c2c, parent, false)
         return ViewHolder(view)
     }
 

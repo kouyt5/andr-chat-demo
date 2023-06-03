@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:itemCount="4"
-            tools:listitem="@layout/conversation_item_left"/>
+            tools:listitem="@layout/conversation_item_c2c"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
