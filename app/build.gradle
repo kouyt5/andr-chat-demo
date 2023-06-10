@@ -21,6 +21,14 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField("String", "HOST", "\"${mqttHost}\"")
+            buildConfigField("int", "PORT", "${mqttPortRelease}")
+        }
+
+        debug {
+            buildConfigField("String", "HOST", "\"${mqttHost}\"")
+            buildConfigField("int", "PORT", "${mqttPortTest}")
         }
     }
     compileOptions {

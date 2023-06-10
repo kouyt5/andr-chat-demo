@@ -7,6 +7,9 @@ import android.os.IBinder
 import com.chenc.cchat.im.helper.BaseMessage
 import com.chenc.cchat.im.helper.ConnectStatusListener
 import com.chenc.cchat.im.helper.RecMesListener
+import com.hivemq.client.mqtt.mqtt5.Mqtt5Client
+import java.util.UUID
+
 
 /**
  * 消息接收服务
@@ -25,7 +28,11 @@ class RecMesService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-
+        val client = Mqtt5Client.builder()
+            .identifier(UUID.randomUUID().toString())
+            .serverHost(IMConstant.HOST)
+            .serverPort(IMConstant.PORT)
+            .buildRx()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

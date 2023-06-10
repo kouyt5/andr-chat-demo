@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 
 
 class InitActivity : AppCompatActivity() {
+    private val TAG : String = "InitActivity"
 
     private lateinit var binding : ActivityInitBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +41,8 @@ class InitActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
     private fun initUI() {
-        val animation = RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+        val animation = RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF,
+            0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
         animation.fillAfter = true
         animation.duration = 1500
         animation.repeatMode = Animation.RESTART
@@ -49,34 +52,44 @@ class InitActivity : AppCompatActivity() {
     }
     private fun initData() {
         // TODO 初始化必要组件等
-        // initNetwork...
+        // init RecService...
         val intent = Intent(this, RecMesService::class.java)
         startService(intent)
         bindService(intent, object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
                 (service as RecMesService.RecMesBinder).setOnConnectListener(object : ConnectStatusListener {
                     override fun onSuccess() {
-                        TODO("Not yet implemented")
+                        Log.i(TAG, "bindService success")
+                        gotoMainPage()
                     }
 
                     override fun onError() {
-                        TODO("Not yet implemented")
+                        Log.e(TAG, "bindService error")
+                        gotoLoginPage()
                     }
 
+                    override fun onNoNetwork() {
+                        Log.e(TAG, "bindService error")
+                        gotoLoginPage()
+                    }
                 })
             }
-
             override fun onServiceDisconnected(name: ComponentName?) {
+                Log.i(TAG, "onServiceDisconnected")
             }
-
         }, BIND_AUTO_CREATE)
-        // after init
+    }
+
+    private fun gotoMainPage() {
         lifecycleScope.launch {
             delay(1000)
             val intent = Intent(this@InitActivity, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun gotoLoginPage() {
 
     }
 }
