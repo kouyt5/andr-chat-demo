@@ -7,7 +7,14 @@ import android.os.IBinder
 import com.chenc.cchat.im.helper.BaseMessage
 import com.chenc.cchat.im.helper.ConnectStatusListener
 import com.chenc.cchat.im.helper.RecMesListener
+import com.hivemq.client.mqtt.datatypes.MqttQos
 import com.hivemq.client.mqtt.mqtt5.Mqtt5Client
+import com.hivemq.client.mqtt.mqtt5.Mqtt5RxClient
+import com.hivemq.client.mqtt.mqtt5.message.connect.connack.Mqtt5ConnAck
+import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish
+import com.hivemq.client.mqtt.mqtt5.message.subscribe.suback.Mqtt5SubAck
+import com.hivemq.client.rx.FlowableWithSingle
+import io.reactivex.Single
 import java.util.UUID
 
 
@@ -21,6 +28,7 @@ class RecMesService : Service() {
     private val mRecCallbacks = ArrayList<RecMesListener>()
     private val mBinder = RecMesBinder(this)
     private var mConnectListener: ConnectStatusListener? = null
+    private var mMqttClient: Mqtt5RxClient? = null
 
     override fun onBind(intent: Intent): IBinder {
         return mBinder
@@ -28,11 +36,18 @@ class RecMesService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        val client = Mqtt5Client.builder()
+        mMqttClient = Mqtt5Client.builder()
             .identifier(UUID.randomUUID().toString())
             .serverHost(IMConstant.HOST)
             .serverPort(IMConstant.PORT)
             .buildRx()
+        val connAckSingle: Single<Mqtt5ConnAck> = mMqttClient!!.connect()
+        val subAckAndMatchingPublishes: FlowableWithSingle<Mqtt5Publish, Mqtt5SubAck> =
+            mMqttClient!!.subscribePublishesWith()
+                .topicFilter("a/b/c").qos(MqttQos.AT_LEAST_ONCE)
+                .addSubscription().topicFilter("a/b/c/d").qos(MqttQos.EXACTLY_ONCE)
+                .applySubscription()
+                .applySubscribe()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.chenc.cchat.databinding.ActivityInitBinding
 import com.chenc.cchat.im.RecMesService
 import com.chenc.cchat.im.helper.ConnectStatusListener
+import com.chenc.cchat.im.helper.IMStatusCode
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -51,7 +52,6 @@ class InitActivity : AppCompatActivity() {
         binding.initLoading.startAnimation(animation)
     }
     private fun initData() {
-        // TODO 初始化必要组件等
         // init RecService...
         val intent = Intent(this, RecMesService::class.java)
         startService(intent)
@@ -63,14 +63,16 @@ class InitActivity : AppCompatActivity() {
                         gotoMainPage()
                     }
 
-                    override fun onError() {
-                        Log.e(TAG, "bindService error")
-                        gotoLoginPage()
-                    }
+                    override fun onError(code: IMStatusCode) {
+                        Log.e(TAG, "bindService error. code = $code")
+                        when (code) {
+                            IMStatusCode.TIME_OUT -> gotoMainPage()
+                            IMStatusCode.UN_LOGIN, IMStatusCode.UN_AUTHORIZED -> gotoLoginPage()
+                            else -> {
+                                gotoLoginPage()
+                            }
+                        }
 
-                    override fun onNoNetwork() {
-                        Log.e(TAG, "bindService error")
-                        gotoLoginPage()
                     }
                 })
             }
