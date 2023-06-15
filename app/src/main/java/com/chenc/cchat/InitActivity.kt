@@ -1,8 +1,10 @@
 package com.chenc.cchat
 
+import android.Manifest
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
@@ -17,6 +19,7 @@ import com.chenc.cchat.databinding.ActivityInitBinding
 import com.chenc.cchat.im.RecMesService
 import com.chenc.cchat.im.helper.ConnectStatusListener
 import com.chenc.cchat.im.helper.IMStatusCode
+import com.chenc.cchat.utils.Permissions
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -25,6 +28,7 @@ class InitActivity : AppCompatActivity() {
     private val TAG : String = "InitActivity"
 
     private lateinit var binding : ActivityInitBinding
+    private var conn : ServiceConnection? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityInitBinding.inflate(layoutInflater)
@@ -52,10 +56,18 @@ class InitActivity : AppCompatActivity() {
         binding.initLoading.startAnimation(animation)
     }
     private fun initData() {
+        if (!Permissions.reqPermission(this, Manifest.permission.INTERNET)) {
+            return
+        }
         // init RecService...
         val intent = Intent(this, RecMesService::class.java)
         startService(intent)
-        bindService(intent, object : ServiceConnection {
+        createServiceConnection()
+        conn?.let { bindService(intent, it, BIND_AUTO_CREATE) }
+    }
+
+    private fun createServiceConnection() {
+        conn = object : ServiceConnection {
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
                 (service as RecMesService.RecMesBinder).setOnConnectListener(object : ConnectStatusListener {
                     override fun onSuccess() {
@@ -66,7 +78,7 @@ class InitActivity : AppCompatActivity() {
                     override fun onError(code: IMStatusCode) {
                         Log.e(TAG, "bindService error. code = $code")
                         when (code) {
-                            IMStatusCode.TIME_OUT -> gotoMainPage()
+                            IMStatusCode.TIME_OUT, IMStatusCode.INTERNET_ERROR -> gotoMainPage()
                             IMStatusCode.UN_LOGIN, IMStatusCode.UN_AUTHORIZED -> gotoLoginPage()
                             else -> {
                                 gotoLoginPage()
@@ -78,9 +90,8 @@ class InitActivity : AppCompatActivity() {
             override fun onServiceDisconnected(name: ComponentName?) {
                 Log.i(TAG, "onServiceDisconnected")
             }
-        }, BIND_AUTO_CREATE)
+        }
     }
-
     private fun gotoMainPage() {
         lifecycleScope.launch {
             delay(1000)
@@ -94,5 +105,10 @@ class InitActivity : AppCompatActivity() {
         // TODO
         Log.i(TAG, "gotoLoginPage")
         gotoMainPage()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        conn?.let { unbindService(it) }
     }
 }
