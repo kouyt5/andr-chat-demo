@@ -2,9 +2,14 @@ name: Android CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: 
+      - "main"
+      - "feature/*"
+      - "personal/kouyt5*"
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - "main"
+      - "feature/*"
 
 jobs:
   build:
