@@ -10,4 +10,9 @@
     <string name="conversation_default_name">名字</string>
     <string name="conversation_default_content">对对对，你说的对，对对对，你说的对，对对对，你说的对</string>
     <string name="head_desc">头像</string>
+
+    <string name="permission_reason_title">权限申请</string>
+    <string name="permission_reason_message">app需要网络、储存等权限用于消息请求、缓存等</string>
+    <string name="permission_reason_button">OK</string>
+    <string name="permission_fail_message">获取权限失败</string>
 </resources>

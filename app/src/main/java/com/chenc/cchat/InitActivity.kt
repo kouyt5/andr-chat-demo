@@ -72,7 +72,6 @@ class InitActivity : AppCompatActivity() {
                                 gotoLoginPage()
                             }
                         }
-
                     }
                 })
             }
@@ -92,6 +91,8 @@ class InitActivity : AppCompatActivity() {
     }
 
     private fun gotoLoginPage() {
-
+        // TODO
+        Log.i(TAG, "gotoLoginPage")
+        gotoMainPage()
     }
 }
