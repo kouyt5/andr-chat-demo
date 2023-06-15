@@ -4,12 +4,16 @@ import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
+import android.util.Log
+import androidx.lifecycle.lifecycleScope
 import com.chenc.cchat.im.helper.BaseMessage
 import com.chenc.cchat.im.helper.ConnectStatusListener
+import com.chenc.cchat.im.helper.IMStatusCode
 import com.chenc.cchat.im.helper.RecMesListener
-import com.hivemq.client.mqtt.mqtt5.Mqtt5Client
-import java.util.UUID
-
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * 消息接收服务
@@ -17,25 +21,35 @@ import java.util.UUID
  * @since v0.1.0
  */
 class RecMesService : Service() {
-
+    private val TAG: String = "RecMesService"
     private val mRecCallbacks = ArrayList<RecMesListener>()
     private val mBinder = RecMesBinder(this)
     private var mConnectListener: ConnectStatusListener? = null
+    private val mClient: MQTTClient = MQTTClient()
 
+    private val ioScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
     override fun onBind(intent: Intent): IBinder {
         return mBinder
     }
 
     override fun onCreate() {
         super.onCreate()
-        val client = Mqtt5Client.builder()
-            .identifier(UUID.randomUUID().toString())
-            .serverHost(IMConstant.HOST)
-            .serverPort(IMConstant.PORT)
-            .buildRx()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        ioScope.launch(CoroutineExceptionHandler { _, throwable ->
+            Log.w(TAG, throwable.message ?: "error unknown")
+        }) {
+            mClient.connect(object : ConnectStatusListener {
+                override fun onSuccess() {
+                    mConnectListener?.onSuccess()
+                }
+
+                override fun onError(code: IMStatusCode) {
+                    mConnectListener?.onError(code)
+                }
+            })
+        }
         return super.onStartCommand(intent, flags, startId)
     }
 

@@ -6,5 +6,6 @@ class IMConstant {
     companion object {
         const val HOST : String = BuildConfig.HOST
         const val PORT: Int = BuildConfig.PORT
+        const val TIMEOUT: Long = 3L
     }
 }
