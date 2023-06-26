@@ -8,6 +8,7 @@ import com.hivemq.client.mqtt.exceptions.ConnectionFailedException
 import com.hivemq.client.mqtt.mqtt5.Mqtt5Client
 import com.hivemq.client.mqtt.mqtt5.Mqtt5RxClient
 import com.hivemq.client.mqtt.mqtt5.exceptions.Mqtt5ConnAckException
+import com.hivemq.client.mqtt.mqtt5.message.auth.Mqtt5SimpleAuth
 import com.hivemq.client.mqtt.mqtt5.message.connect.connack.Mqtt5ConnAck
 import com.hivemq.client.mqtt.mqtt5.message.connect.connack.Mqtt5ConnAckReasonCode
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish
@@ -48,6 +49,13 @@ class MQTTClient {
 
     }
 
+    private fun auth() : Mqtt5SimpleAuth {
+        val simpleAuth = Mqtt5SimpleAuth.builder()
+            .username("username")
+            .password("password".toByteArray())
+            .build()
+        return simpleAuth
+    }
     private fun doOnError(throwable: Throwable, listener: ConnectStatusListener) {
         Log.i(
             TAG, "Connection failed, " + throwable.message

@@ -1,10 +1,9 @@
-package com.chenc.cchat
+package com.chenc.cchat.ui.init
 
 import android.Manifest
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
@@ -15,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.chenc.cchat.MainActivity
+import com.chenc.cchat.data.AccountInfo
 import com.chenc.cchat.databinding.ActivityInitBinding
 import com.chenc.cchat.im.RecMesService
 import com.chenc.cchat.im.helper.ConnectStatusListener
@@ -56,9 +57,15 @@ class InitActivity : AppCompatActivity() {
         binding.initLoading.startAnimation(animation)
     }
     private fun initData() {
+        AccountInfo.init()
         if (!Permissions.reqPermission(this, Manifest.permission.INTERNET)) {
             return
         }
+
+        checkLogin()
+    }
+
+    private fun initService() {
         // init RecService...
         val intent = Intent(this, RecMesService::class.java)
         startService(intent)
@@ -91,6 +98,15 @@ class InitActivity : AppCompatActivity() {
                 Log.i(TAG, "onServiceDisconnected")
             }
         }
+    }
+
+    private fun checkLogin() {
+        if (AccountInfo.userName == null) {
+            gotoLoginPage()
+        }
+
+
+
     }
     private fun gotoMainPage() {
         lifecycleScope.launch {

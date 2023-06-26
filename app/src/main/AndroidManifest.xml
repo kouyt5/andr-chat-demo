@@ -27,7 +27,7 @@
             android:exported="false"
             android:label="@string/title_activity_main" />
         <activity
-            android:name=".InitActivity"
+            android:name=".ui.init.InitActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
